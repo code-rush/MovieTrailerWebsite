@@ -25,6 +25,8 @@ main_page_head = '''
         }
         .movie-details {
             padding: 20px;
+            padding-left: 10px;
+            padding-right: 10px;
         }
         #trailer .modal-dialog {
             margin-top: 200px;
