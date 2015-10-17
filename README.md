@@ -1,5 +1,5 @@
 # MovieTrailerWebsite
-Open my_movies.html file which will take you to my website. The page contains my favorite movie cards and its details and you can watch their trailers.
+Open my_movies.html file which will take you to my website. The page contains my favorite movie cards. You can flip cards by hovering over them. The front side contains the movie images and the back side contains its description and trailer button.
 
 Steps to watch movie trailers
 -----------------------------
