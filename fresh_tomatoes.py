@@ -17,16 +17,8 @@ main_page_head = '''
     <script src="http://code.jquery.com/jquery-1.10.1.min.js"></script>
     <script src="https://netdna.bootstrapcdn.com/bootstrap/3.1.0/js/bootstrap.min.js"></script>
     <style type="text/css" media="screen">
-        body {
-            padding-top: 80px;
-        }
-        .hidden-content {
-            display: none;
-        }
-        .movie-details {
-            padding: 20px;
-            padding-left: 10px;
-            padding-right: 10px;
+        span{
+            font-weight: bold;
         }
         #trailer .modal-dialog {
             margin-top: 200px;
@@ -43,13 +35,47 @@ main_page_head = '''
             width: 100%;
             height: 100%;
         }
-        .movie-tile {
-            margin-bottom: 20px;
-            padding-top: 20px;
+        .back {
+            padding: 10px;
         }
-        .movie-tile:hover {
-            background-color: #EEE;
-            cursor: pointer;
+        /* movie card container */
+        .movie-tile {
+            margin: 20px 5px 10px 5px;
+            padding: 40px;
+            height: 400px;
+            width: 250px;
+        }
+        /* movie card front side */
+        .movie-tile > .front {
+            position: absolute;
+            -webkit-transform: perspective(1000px) rotateY(0deg);
+            transform: perspective(1000px) rotateY(0deg);
+            background: #FFFFFF;
+            height: 400px;
+            width: 250px;
+            -webkit-backface-visibility: hidden;
+            backface-visibility: hidden;
+            transition: transform .5s linear 0s;
+        }
+        /* movie card back side */
+        .movie-tile > .back {
+            position: absolute;
+            -webkit-transform: perspective(1000px) rotateY(180deg);
+            transform: perspective(1000px) rotateY(180deg);
+            background: #F5F5F5;
+            height: 400px;
+            width: 250px;
+            -webkit-backface-visibility: hidden;
+            backface-visibility: hidden;
+            transition: transform .5s linear 0s;
+        }
+        .movie-tile:hover > .front{
+            -webkit-transform: perspective(1000px) rotateY(-180deg);
+            transform: perspective(1000px) rotateY(-180deg);
+        }
+        .movie-tile:hover > .back{
+            -webkit-transform: perspective(1000px) rotateY(0deg);
+            transform: perspective(1000px) rotateY(0deg);
         }
         .scale-media {
             padding-bottom: 56.25%;
@@ -72,18 +98,17 @@ main_page_head = '''
             // reliable way to ensure the video stops playing in IE
             $("#trailer-video-container").empty();
         });
-        
         // Start playing the video whenever the trailer modal is opened
         $(document).on('click', '.btn-primary', function (event) {
-            var trailerYouTubeId = $(this).attr('data-trailer-youtube-id');
+            var trailerYouTubeId = $(this).attr('data-trailer-youtube-id')
             var sourceUrl = 'http://www.youtube.com/embed/' + trailerYouTubeId + '?autoplay=1&html5=1';
             $("#trailer-video-container").empty().append($("<iframe></iframe>", {
               'id': 'trailer-video',
               'type': 'text-html',
               'src': sourceUrl,
               'frameborder': 0,
-              
-              //Allows full screen video playing
+
+              //Allow full screen video playing
               'allowFullScreen': true
             }));
         });
@@ -93,13 +118,6 @@ main_page_head = '''
             $(this).next("div").show("fast", showNext);
           });
         });
-
-        // Show and hide movie contents
-        $(document).ready(function () {
-            $('.movie-tile').click(function () {
-                $(this).closest('.movie-tile').find('.hidden-content').slideToggle();
-            });
-        });
     </script>
 </head>
 '''
@@ -108,29 +126,25 @@ main_page_head = '''
 # The main page layout and title bar
 main_page_content = '''
   <body>
-
     <!-- Trailer Video Modal -->
     <div class="modal" id="trailer">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <a href="#" class="hanging-close" data-dismiss="modal" aria-hidden="true">
-                    <img src="https://lh5.ggpht.com/v4-628SilF0HtHuHdu5EzxD7WRqOrrTIDi_MhEG6_qkNtUK5Wg7KPkofp_VJoF7RS2LhxwEFCO1ICHZlc-o_=s0#w=24&h=24"/>
-                </a>
-                <div class="scale-media" id="trailer-video-container">
-                </div>
-            </div>
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <a href="#" class="hanging-close" data-dismiss="modal" aria-hidden="true">
+            <img src="https://lh5.ggpht.com/v4-628SilF0HtHuHdu5EzxD7WRqOrrTIDi_MhEG6_qkNtUK5Wg7KPkofp_VJoF7RS2LhxwEFCO1ICHZlc-o_=s0#w=24&h=24"/>
+          </a>
+          <div class="scale-media" id="trailer-video-container">
+          </div>
         </div>
-    </div>
-            
       </div>
     </div>
 
     <!-- Main Page Content -->
     <div class="container">
-      <div class="navbar navbar-inverse navbar-fixed-top" role="navigation">
+      <div class="navbar navbar-inverse" role="navigation">
         <div class="container">
           <div class="navbar-header">
-            <a class="navbar-brand" href="#">My Favorite Movies</a>
+            <a class="navbar-brand" href="#">My Favorite Movie Cards</a>
           </div>
         </div>
       </div>
@@ -145,27 +159,29 @@ main_page_content = '''
 
 # A single movie entry html template
 movie_tile_content = '''
-<div class="col-md-4 col-lg-3 movie-tile text-center">
-    <img src="{poster_image_url}" width="220" height="342">
-    <h2>{movie_title}</h2>
+<div class="col-md-3 col-lg-4 col-sm-6 movie-tile text-center">
+    <div class="front">
+        <img src="{poster_image_url}" height="342" width="220">
+        <h2>{movie_title}</h2>
+    </div>
 
-    <!-- Movie details collapsing panel -->
+    <div class="back">
+        <div><h3>{movie_title}</h3></div>
+        <hr>
+        <div class="text-left">
+            <p><span>Storyline:  </span>{movie_description}</p>
+            <p><span>Release Date: </span>{movie_release_date}</p>
+            <p><span>Stars: </span>{movie_stars}</p>
+            <p><span>Director: </span>{movie_director}</p>
 
-    <div class="hidden-content">
-        <div class="row text-left movie-details">
-            <p><strong>Storyline: </strong>{movie_description}</p>
-            <p><strong>Release Date: </strong>{movie_release_date}</p>
-            <p><strong>Director: </strong>{movie_director}</p>
-            <p><strong>Stars: </strong>{movie_stars}</p>
-            
-            <!-- Button to trigger Trailer video modal -->
-            
-            <button type="button" class="btn btn-primary btn-xs" data-trailer-youtube-id="{trailer_youtube_id}" data-toggle="modal" data-target="#trailer"><u>Watch Trailer</u></button>
-        
+            <!-- Button to trigger movie trailer modal -->
+
+            <div class="text-center">
+                <button type="button" class="btn btn-primary btn-sm" data-trailer-youtube-id="{trailer_youtube_id}" data-toggle="modal" data-target="#trailer">Watch Trailer</button> 
+            </div>
         </div>
     </div>
 </div>
-
 '''
 
 
@@ -193,7 +209,7 @@ def create_movie_tiles_content(movies):
             movie_stars=movie.movie_stars
         )
     return content
-        
+
 
 def open_movies_page(movies):
     # Create or overwrite the output file

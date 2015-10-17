@@ -11,16 +11,8 @@
     <script src="http://code.jquery.com/jquery-1.10.1.min.js"></script>
     <script src="https://netdna.bootstrapcdn.com/bootstrap/3.1.0/js/bootstrap.min.js"></script>
     <style type="text/css" media="screen">
-        body {
-            padding-top: 80px;
-        }
-        .hidden-content {
-            display: none;
-        }
-        .movie-details {
-            padding: 20px;
-            padding-left: 10px;
-            padding-right: 10px;
+        span{
+            font-weight: bold;
         }
         #trailer .modal-dialog {
             margin-top: 200px;
@@ -37,13 +29,47 @@
             width: 100%;
             height: 100%;
         }
-        .movie-tile {
-            margin-bottom: 20px;
-            padding-top: 20px;
+        .back {
+            padding: 10px;
         }
-        .movie-tile:hover {
-            background-color: #EEE;
-            cursor: pointer;
+        /* movie card container */
+        .movie-tile {
+            margin: 20px 5px 10px 5px;
+            padding: 40px;
+            height: 400px;
+            width: 250px;
+        }
+        /* movie card front side */
+        .movie-tile > .front {
+            position: absolute;
+            -webkit-transform: perspective(1000px) rotateY(0deg);
+            transform: perspective(1000px) rotateY(0deg);
+            background: #FFFFFF;
+            height: 400px;
+            width: 250px;
+            -webkit-backface-visibility: hidden;
+            backface-visibility: hidden;
+            transition: transform .5s linear 0s;
+        }
+        /* movie card back side */
+        .movie-tile > .back {
+            position: absolute;
+            -webkit-transform: perspective(1000px) rotateY(180deg);
+            transform: perspective(1000px) rotateY(180deg);
+            background: #F5F5F5;
+            height: 400px;
+            width: 250px;
+            -webkit-backface-visibility: hidden;
+            backface-visibility: hidden;
+            transition: transform .5s linear 0s;
+        }
+        .movie-tile:hover > .front{
+            -webkit-transform: perspective(1000px) rotateY(-180deg);
+            transform: perspective(1000px) rotateY(-180deg);
+        }
+        .movie-tile:hover > .back{
+            -webkit-transform: perspective(1000px) rotateY(0deg);
+            transform: perspective(1000px) rotateY(0deg);
         }
         .scale-media {
             padding-bottom: 56.25%;
@@ -66,18 +92,17 @@
             // reliable way to ensure the video stops playing in IE
             $("#trailer-video-container").empty();
         });
-        
         // Start playing the video whenever the trailer modal is opened
         $(document).on('click', '.btn-primary', function (event) {
-            var trailerYouTubeId = $(this).attr('data-trailer-youtube-id');
+            var trailerYouTubeId = $(this).attr('data-trailer-youtube-id')
             var sourceUrl = 'http://www.youtube.com/embed/' + trailerYouTubeId + '?autoplay=1&html5=1';
             $("#trailer-video-container").empty().append($("<iframe></iframe>", {
               'id': 'trailer-video',
               'type': 'text-html',
               'src': sourceUrl,
               'frameborder': 0,
-              
-              //Allows full screen video playing
+
+              //Allow full screen video playing
               'allowFullScreen': true
             }));
         });
@@ -87,221 +112,226 @@
             $(this).next("div").show("fast", showNext);
           });
         });
-
-        // Show and hide movie contents
-        $(document).ready(function () {
-            $('.movie-tile').click(function () {
-                $(this).closest('.movie-tile').find('.hidden-content').slideToggle();
-            });
-        });
     </script>
 </head>
 
   <body>
-
     <!-- Trailer Video Modal -->
     <div class="modal" id="trailer">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <a href="#" class="hanging-close" data-dismiss="modal" aria-hidden="true">
-                    <img src="https://lh5.ggpht.com/v4-628SilF0HtHuHdu5EzxD7WRqOrrTIDi_MhEG6_qkNtUK5Wg7KPkofp_VJoF7RS2LhxwEFCO1ICHZlc-o_=s0#w=24&h=24"/>
-                </a>
-                <div class="scale-media" id="trailer-video-container">
-                </div>
-            </div>
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <a href="#" class="hanging-close" data-dismiss="modal" aria-hidden="true">
+            <img src="https://lh5.ggpht.com/v4-628SilF0HtHuHdu5EzxD7WRqOrrTIDi_MhEG6_qkNtUK5Wg7KPkofp_VJoF7RS2LhxwEFCO1ICHZlc-o_=s0#w=24&h=24"/>
+          </a>
+          <div class="scale-media" id="trailer-video-container">
+          </div>
         </div>
-    </div>
-            
       </div>
     </div>
 
     <!-- Main Page Content -->
     <div class="container">
-      <div class="navbar navbar-inverse navbar-fixed-top" role="navigation">
+      <div class="navbar navbar-inverse" role="navigation">
         <div class="container">
           <div class="navbar-header">
-            <a class="navbar-brand" href="#">My Favorite Movies</a>
+            <a class="navbar-brand" href="#">My Favorite Movie Cards</a>
           </div>
         </div>
       </div>
     </div>
     <div class="container">
       
-<div class="col-md-4 col-lg-3 movie-tile text-center">
-    <img src="https://upload.wikimedia.org/wikipedia/en/thumb/3/38/Schindler%27s_List_movie.jpg/220px-Schindler%27s_List_movie.jpg" width="220" height="342">
-    <h2>Schindler's List</h2>
+<div class="col-md-3 col-lg-4 col-sm-6 movie-tile text-center">
+    <div class="front">
+        <img src="https://upload.wikimedia.org/wikipedia/en/thumb/3/38/Schindler%27s_List_movie.jpg/220px-Schindler%27s_List_movie.jpg" height="342" width="220">
+        <h2>Schindler's List</h2>
+    </div>
 
-    <!-- Movie details collapsing panel -->
+    <div class="back">
+        <div><h3>Schindler's List</h3></div>
+        <hr>
+        <div class="text-left">
+            <p><span>Storyline:  </span>In Poland during World War II, Oskar Schindler gradually becomes concerned for his Jewish workforce after witnessing their persecution by the Nazis.</p>
+            <p><span>Release Date: </span>4 February 1994</p>
+            <p><span>Stars: </span>Liam Neeson, Ralph Fiennes, Ben Kingsley</p>
+            <p><span>Director: </span>Steven Spielberg</p>
 
-    <div class="hidden-content">
-        <div class="row text-left movie-details">
-            <p><strong>Storyline: </strong>In Poland during World War II, Oskar Schindler gradually becomes concerned for his Jewish workforce after witnessing their persecution by the Nazis.</p>
-            <p><strong>Release Date: </strong>4 February 1994</p>
-            <p><strong>Director: </strong>Steven Spielberg</p>
-            <p><strong>Stars: </strong>Liam Neeson, Ralph Fiennes, Ben Kingsley</p>
-            
-            <!-- Button to trigger Trailer video modal -->
-            
-            <button type="button" class="btn btn-primary btn-xs" data-trailer-youtube-id="JdRGC-w9syA" data-toggle="modal" data-target="#trailer"><u>Watch Trailer</u></button>
-        
+            <!-- Button to trigger movie trailer modal -->
+
+            <div class="text-center">
+                <button type="button" class="btn btn-primary btn-sm" data-trailer-youtube-id="JdRGC-w9syA" data-toggle="modal" data-target="#trailer">Watch Trailer</button> 
+            </div>
         </div>
     </div>
 </div>
 
+<div class="col-md-3 col-lg-4 col-sm-6 movie-tile text-center">
+    <div class="front">
+        <img src="http://ia.media-imdb.com/images/M/MV5BMjAxOTU3Mzc1M15BMl5BanBnXkFtZTcwMzk1ODUzNg@@._V1_SY317_CR0,0,214,317_AL_.jpg" height="342" width="220">
+        <h2>Moneyball</h2>
+    </div>
 
-<div class="col-md-4 col-lg-3 movie-tile text-center">
-    <img src="http://ia.media-imdb.com/images/M/MV5BMjAxOTU3Mzc1M15BMl5BanBnXkFtZTcwMzk1ODUzNg@@._V1_SY317_CR0,0,214,317_AL_.jpg" width="220" height="342">
-    <h2>Moneyball</h2>
+    <div class="back">
+        <div><h3>Moneyball</h3></div>
+        <hr>
+        <div class="text-left">
+            <p><span>Storyline:  </span>Oakland A's general manager Billy Beane's successful attempt to assemble a baseball team on a lean budget by employing computer-generated analysis to acquire new players.</p>
+            <p><span>Release Date: </span>23 September 2011</p>
+            <p><span>Stars: </span>Brad Pitt, Robin Wright, Jonah Hill</p>
+            <p><span>Director: </span>Bennett Miller</p>
 
-    <!-- Movie details collapsing panel -->
+            <!-- Button to trigger movie trailer modal -->
 
-    <div class="hidden-content">
-        <div class="row text-left movie-details">
-            <p><strong>Storyline: </strong>Oakland A's general manager Billy Beane's successful attempt to assemble a baseball team on a lean budget by employing computer-generated analysis to acquire new players.</p>
-            <p><strong>Release Date: </strong>23 September 2011</p>
-            <p><strong>Director: </strong>Bennett Miller</p>
-            <p><strong>Stars: </strong>Brad Pitt, Robin Wright, Jonah Hill</p>
-            
-            <!-- Button to trigger Trailer video modal -->
-            
-            <button type="button" class="btn btn-primary btn-xs" data-trailer-youtube-id="AiAHlZVgXjk" data-toggle="modal" data-target="#trailer"><u>Watch Trailer</u></button>
-        
+            <div class="text-center">
+                <button type="button" class="btn btn-primary btn-sm" data-trailer-youtube-id="AiAHlZVgXjk" data-toggle="modal" data-target="#trailer">Watch Trailer</button> 
+            </div>
         </div>
     </div>
 </div>
 
+<div class="col-md-3 col-lg-4 col-sm-6 movie-tile text-center">
+    <div class="front">
+        <img src="https://upload.wikimedia.org/wikipedia/en/thumb/b/b0/Avatar-Teaser-Poster.jpg/220px-Avatar-Teaser-Poster.jpg" height="342" width="220">
+        <h2>Avatar</h2>
+    </div>
 
-<div class="col-md-4 col-lg-3 movie-tile text-center">
-    <img src="https://upload.wikimedia.org/wikipedia/en/thumb/b/b0/Avatar-Teaser-Poster.jpg/220px-Avatar-Teaser-Poster.jpg" width="220" height="342">
-    <h2>Avatar</h2>
+    <div class="back">
+        <div><h3>Avatar</h3></div>
+        <hr>
+        <div class="text-left">
+            <p><span>Storyline:  </span>A paraplegic marine dispatched to the moon Pandora on a unique mission becomes torn between following his orders and protecting the world he feels is his home.</p>
+            <p><span>Release Date: </span>18 December 2009</p>
+            <p><span>Stars: </span>Sam Worthington, Zoe Saldana, Sigourney Weaver</p>
+            <p><span>Director: </span>James Cameron</p>
 
-    <!-- Movie details collapsing panel -->
+            <!-- Button to trigger movie trailer modal -->
 
-    <div class="hidden-content">
-        <div class="row text-left movie-details">
-            <p><strong>Storyline: </strong>A paraplegic marine dispatched to the moon Pandora on a unique mission becomes torn between following his orders and protecting the world he feels is his home.</p>
-            <p><strong>Release Date: </strong>18 December 2009</p>
-            <p><strong>Director: </strong>James Cameron</p>
-            <p><strong>Stars: </strong>Sam Worthington, Zoe Saldana, Sigourney Weaver</p>
-            
-            <!-- Button to trigger Trailer video modal -->
-            
-            <button type="button" class="btn btn-primary btn-xs" data-trailer-youtube-id="5PSNL1qE6VY" data-toggle="modal" data-target="#trailer"><u>Watch Trailer</u></button>
-        
+            <div class="text-center">
+                <button type="button" class="btn btn-primary btn-sm" data-trailer-youtube-id="5PSNL1qE6VY" data-toggle="modal" data-target="#trailer">Watch Trailer</button> 
+            </div>
         </div>
     </div>
 </div>
 
+<div class="col-md-3 col-lg-4 col-sm-6 movie-tile text-center">
+    <div class="front">
+        <img src="http://ia.media-imdb.com/images/M/MV5BMTMxNTMwODM0NF5BMl5BanBnXkFtZTcwODAyMTk2Mw@@._V1_SY317_CR0,0,214,317_AL_.jpg" height="342" width="220">
+        <h2>The Dark Knight</h2>
+    </div>
 
-<div class="col-md-4 col-lg-3 movie-tile text-center">
-    <img src="http://ia.media-imdb.com/images/M/MV5BMTMxNTMwODM0NF5BMl5BanBnXkFtZTcwODAyMTk2Mw@@._V1_SY317_CR0,0,214,317_AL_.jpg" width="220" height="342">
-    <h2>The Dark Knight</h2>
+    <div class="back">
+        <div><h3>The Dark Knight</h3></div>
+        <hr>
+        <div class="text-left">
+            <p><span>Storyline:  </span>When the menace known as the Joker wreaks havoc and chaos on the people of Gotham, the caped crusader must come to terms with one of the greatest psychological tests of his ability to fight injustice.</p>
+            <p><span>Release Date: </span>18 July 2008</p>
+            <p><span>Stars: </span>Christian Bale, Heath Ledger, Aaron Eckhart</p>
+            <p><span>Director: </span>Christopher Nolan</p>
 
-    <!-- Movie details collapsing panel -->
+            <!-- Button to trigger movie trailer modal -->
 
-    <div class="hidden-content">
-        <div class="row text-left movie-details">
-            <p><strong>Storyline: </strong>When the menace known as the Joker wreaks havoc and chaos on the people of Gotham, the caped crusader must come to terms with one of the greatest psychological tests of his ability to fight injustice.</p>
-            <p><strong>Release Date: </strong>18 July 2008</p>
-            <p><strong>Director: </strong>Christopher Nolan</p>
-            <p><strong>Stars: </strong>Christian Bale, Heath Ledger, Aaron Eckhart</p>
-            
-            <!-- Button to trigger Trailer video modal -->
-            
-            <button type="button" class="btn btn-primary btn-xs" data-trailer-youtube-id="yrJL5JxEYIw" data-toggle="modal" data-target="#trailer"><u>Watch Trailer</u></button>
-        
+            <div class="text-center">
+                <button type="button" class="btn btn-primary btn-sm" data-trailer-youtube-id="yrJL5JxEYIw" data-toggle="modal" data-target="#trailer">Watch Trailer</button> 
+            </div>
         </div>
     </div>
 </div>
 
+<div class="col-md-3 col-lg-4 col-sm-6 movie-tile text-center">
+    <div class="front">
+        <img src="http://ia.media-imdb.com/images/M/MV5BMTMxMTIyNzMxMV5BMl5BanBnXkFtZTcwOTc4OTI3Mg@@._V1_SX214_AL_.jpg" height="342" width="220">
+        <h2>Shutter Island</h2>
+    </div>
 
-<div class="col-md-4 col-lg-3 movie-tile text-center">
-    <img src="http://ia.media-imdb.com/images/M/MV5BMTMxMTIyNzMxMV5BMl5BanBnXkFtZTcwOTc4OTI3Mg@@._V1_SX214_AL_.jpg" width="220" height="342">
-    <h2>Shutter Island</h2>
+    <div class="back">
+        <div><h3>Shutter Island</h3></div>
+        <hr>
+        <div class="text-left">
+            <p><span>Storyline:  </span>A U.S Marshal investigates the disappearance of a murderess who escaped from a hospital for the criminally insane.</p>
+            <p><span>Release Date: </span>19 February 2010</p>
+            <p><span>Stars: </span>Leonardo DiCaprio, Emily Mortimer, Mark Ruffalo</p>
+            <p><span>Director: </span>Martin Scorsese</p>
 
-    <!-- Movie details collapsing panel -->
+            <!-- Button to trigger movie trailer modal -->
 
-    <div class="hidden-content">
-        <div class="row text-left movie-details">
-            <p><strong>Storyline: </strong>A U.S Marshal investigates the disappearance of a murderess who escaped from a hospital for the criminally insane.</p>
-            <p><strong>Release Date: </strong>19 February 2010</p>
-            <p><strong>Director: </strong>Martin Scorsese</p>
-            <p><strong>Stars: </strong>Leonardo DiCaprio, Emily Mortimer, Mark Ruffalo</p>
-            
-            <!-- Button to trigger Trailer video modal -->
-            
-            <button type="button" class="btn btn-primary btn-xs" data-trailer-youtube-id="5iaYLCiq5RM" data-toggle="modal" data-target="#trailer"><u>Watch Trailer</u></button>
-        
+            <div class="text-center">
+                <button type="button" class="btn btn-primary btn-sm" data-trailer-youtube-id="5iaYLCiq5RM" data-toggle="modal" data-target="#trailer">Watch Trailer</button> 
+            </div>
         </div>
     </div>
 </div>
 
+<div class="col-md-3 col-lg-4 col-sm-6 movie-tile text-center">
+    <div class="front">
+        <img src="http://ia.media-imdb.com/images/M/MV5BNzEwNzQ1NjczM15BMl5BanBnXkFtZTcwNTk3MTE1Mg@@._V1_SX214_AL_.jpg" height="342" width="220">
+        <h2>The Hurt Locker</h2>
+    </div>
 
-<div class="col-md-4 col-lg-3 movie-tile text-center">
-    <img src="http://ia.media-imdb.com/images/M/MV5BNzEwNzQ1NjczM15BMl5BanBnXkFtZTcwNTk3MTE1Mg@@._V1_SX214_AL_.jpg" width="220" height="342">
-    <h2>The Hurt Locker</h2>
+    <div class="back">
+        <div><h3>The Hurt Locker</h3></div>
+        <hr>
+        <div class="text-left">
+            <p><span>Storyline:  </span>During the Iraq War, a Sergeant recently assigned to an army bomb squad is put at odds with his squad mates due to his maverick way of handling his work.</p>
+            <p><span>Release Date: </span>31 July 2009</p>
+            <p><span>Stars: </span>Jeremy Renner, Anthony Mackie, Brian Geraghty</p>
+            <p><span>Director: </span>Kathryn Bigelow</p>
 
-    <!-- Movie details collapsing panel -->
+            <!-- Button to trigger movie trailer modal -->
 
-    <div class="hidden-content">
-        <div class="row text-left movie-details">
-            <p><strong>Storyline: </strong>During the Iraq War, a Sergeant recently assigned to an army bomb squad is put at odds with his squad mates due to his maverick way of handling his work.</p>
-            <p><strong>Release Date: </strong>31 July 2009</p>
-            <p><strong>Director: </strong>Kathryn Bigelow</p>
-            <p><strong>Stars: </strong>Jeremy Renner, Anthony Mackie, Brian Geraghty</p>
-            
-            <!-- Button to trigger Trailer video modal -->
-            
-            <button type="button" class="btn btn-primary btn-xs" data-trailer-youtube-id="2GxSDZc8etg" data-toggle="modal" data-target="#trailer"><u>Watch Trailer</u></button>
-        
+            <div class="text-center">
+                <button type="button" class="btn btn-primary btn-sm" data-trailer-youtube-id="2GxSDZc8etg" data-toggle="modal" data-target="#trailer">Watch Trailer</button> 
+            </div>
         </div>
     </div>
 </div>
 
+<div class="col-md-3 col-lg-4 col-sm-6 movie-tile text-center">
+    <div class="front">
+        <img src="http://ia.media-imdb.com/images/M/MV5BMTczNTI2ODUwOF5BMl5BanBnXkFtZTcwMTU0NTIzMw@@._V1_SX214_AL_.jpg" height="342" width="220">
+        <h2>Iron Man</h2>
+    </div>
 
-<div class="col-md-4 col-lg-3 movie-tile text-center">
-    <img src="http://ia.media-imdb.com/images/M/MV5BMTczNTI2ODUwOF5BMl5BanBnXkFtZTcwMTU0NTIzMw@@._V1_SX214_AL_.jpg" width="220" height="342">
-    <h2>Iron Man</h2>
+    <div class="back">
+        <div><h3>Iron Man</h3></div>
+        <hr>
+        <div class="text-left">
+            <p><span>Storyline:  </span>After being held captive in an Afghan cave, an industrialist creates a unique weaponized suit of armor to fight evil.</p>
+            <p><span>Release Date: </span>2 May 2008</p>
+            <p><span>Stars: </span>Robert Downey Jr., Gwyneth Paltrow, Terrence Howard</p>
+            <p><span>Director: </span>Jon Favreau</p>
 
-    <!-- Movie details collapsing panel -->
+            <!-- Button to trigger movie trailer modal -->
 
-    <div class="hidden-content">
-        <div class="row text-left movie-details">
-            <p><strong>Storyline: </strong>After being held captive in an Afghan cave, an industrialist creates a unique weaponized suit of armor to fight evil.</p>
-            <p><strong>Release Date: </strong>2 May 2008</p>
-            <p><strong>Director: </strong>Jon Favreau</p>
-            <p><strong>Stars: </strong>Robert Downey Jr., Gwyneth Paltrow, Terrence Howard</p>
-            
-            <!-- Button to trigger Trailer video modal -->
-            
-            <button type="button" class="btn btn-primary btn-xs" data-trailer-youtube-id="8hYlB38asDY" data-toggle="modal" data-target="#trailer"><u>Watch Trailer</u></button>
-        
+            <div class="text-center">
+                <button type="button" class="btn btn-primary btn-sm" data-trailer-youtube-id="8hYlB38asDY" data-toggle="modal" data-target="#trailer">Watch Trailer</button> 
+            </div>
         </div>
     </div>
 </div>
 
+<div class="col-md-3 col-lg-4 col-sm-6 movie-tile text-center">
+    <div class="front">
+        <img src="http://ia.media-imdb.com/images/M/MV5BMjA0ODYwNzU5Nl5BMl5BanBnXkFtZTcwNTI1MTgxMw@@._V1_SX214_AL_.jpg" height="342" width="220">
+        <h2>Grown Ups</h2>
+    </div>
 
-<div class="col-md-4 col-lg-3 movie-tile text-center">
-    <img src="http://ia.media-imdb.com/images/M/MV5BMjA0ODYwNzU5Nl5BMl5BanBnXkFtZTcwNTI1MTgxMw@@._V1_SX214_AL_.jpg" width="220" height="342">
-    <h2>Grown Ups</h2>
+    <div class="back">
+        <div><h3>Grown Ups</h3></div>
+        <hr>
+        <div class="text-left">
+            <p><span>Storyline:  </span>After their high school basketball coach passes away, five good friends and former teammates reunite for a Fourth of July holiday weekend.</p>
+            <p><span>Release Date: </span>25 June 2010</p>
+            <p><span>Stars: </span>Adam Sandler, Salma Hayek, Kevin James</p>
+            <p><span>Director: </span>Dennis Dugan</p>
 
-    <!-- Movie details collapsing panel -->
+            <!-- Button to trigger movie trailer modal -->
 
-    <div class="hidden-content">
-        <div class="row text-left movie-details">
-            <p><strong>Storyline: </strong>After their high school basketball coach passes away, five good friends and former teammates reunite for a Fourth of July holiday weekend.</p>
-            <p><strong>Release Date: </strong>25 June 2010</p>
-            <p><strong>Director: </strong>Dennis Dugan</p>
-            <p><strong>Stars: </strong>Adam Sandler, Salma Hayek, Kevin James</p>
-            
-            <!-- Button to trigger Trailer video modal -->
-            
-            <button type="button" class="btn btn-primary btn-xs" data-trailer-youtube-id="cjfuK5QJyEQ" data-toggle="modal" data-target="#trailer"><u>Watch Trailer</u></button>
-        
+            <div class="text-center">
+                <button type="button" class="btn btn-primary btn-sm" data-trailer-youtube-id="cjfuK5QJyEQ" data-toggle="modal" data-target="#trailer">Watch Trailer</button> 
+            </div>
         </div>
     </div>
 </div>
-
 
     </div>
   </body>
