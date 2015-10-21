@@ -1,8 +1,9 @@
 class Movie():
     '''This class provides a way to store movie related information'''
-    
-    #Method initialises the object and stores the information of movies
-    def __init__(self, movie_title, movie_storyline, poster_image, trailer_youtube, release_date, movie_director, movie_stars):
+
+    # Method initialises the object and stores the information of movies
+    def __init__(self, movie_title, movie_storyline, poster_image,
+                 trailer_youtube, release_date, movie_director, movie_stars):
         self.title = movie_title
         self.storyline = movie_storyline
         self.poster_image_url = poster_image
@@ -11,8 +12,7 @@ class Movie():
         self.movie_stars = movie_stars
         self.movie_director = movie_director
 
-
-    #Additional information about the movies
+    # Additional information about the movies
     def get_movie_details(self):
         print("Storyline: "+self.storyline)
         print("Release Date: "+self.release_date)
