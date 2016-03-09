@@ -1,5 +1,8 @@
 # MovieTrailerWebsite
 
+MovieTrailerWebsite is a simple webpage to store user's favorite movies, details about the movies and its trailer.
+
+
 ## Two ways to run the website
 
 1) First, Clone this repository to your computer. Open my_movies.html file which will take you to my website. The page contains my favorite movie cards. You can flip cards by hovering over them. The front side contains the movie images and the back side contains its description and trailer button. 
